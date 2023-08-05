@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a58b49998fdf89f429d7e9116e5c85ad, type: 3}
+  m_Name: Helmet of Defence
+  m_EditorClassIdentifier: 
+  name: Helmet of Iron
+  icon: {fileID: -3174110321504300362, guid: ec53709e182ca844299c1f5fdc5e1d8e, type: 3}
+  isDefaultItem: 0
+  equipSlot: 0
+  IdEquipment: 0
+  armorModifier: 3
+  damageModifier: 0
