@@ -9041,6 +9041,11 @@ MonoBehaviour:
   whatIsEnemies:
     serializedVersion: 2
     m_Bits: 64
+  comboAttacks:
+  - {fileID: 11400000, guid: f6e904893faf50347aaad4214b24789c, type: 2}
+  - {fileID: 11400000, guid: c7f30e01adc204f418314ff9e04feb6b, type: 2}
+  - {fileID: 11400000, guid: 4083941dec00f7d41896b854f66f78f8, type: 2}
+  - {fileID: 11400000, guid: c7f30e01adc204f418314ff9e04feb6b, type: 2}
 --- !u!50 &225288093
 Rigidbody2D:
   serializedVersion: 4
@@ -16763,7 +16768,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 495018315
   m_SortingLayer: 3
-  m_SortingOrder: 5
+  m_SortingOrder: 4
   m_Sprite: {fileID: 21300054, guid: b217a154a8231e54bbb50405bdfafbaf, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -18931,7 +18936,7 @@ Transform:
   m_GameObject: {fileID: 1416400930}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0.7480071, w: -0.6636908}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0.045, y: 0.035, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -18977,7 +18982,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 495018315
   m_SortingLayer: 3
-  m_SortingOrder: 5
+  m_SortingOrder: 4
   m_Sprite: {fileID: 21300056, guid: b217a154a8231e54bbb50405bdfafbaf, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0

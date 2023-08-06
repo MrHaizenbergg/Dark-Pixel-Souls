@@ -112,6 +112,8 @@ public class KnightHero : Singlton<KnightHero>, IDamagable
         if (EventSystem.current.IsPointerOverGameObject())
             return;
 
+        ExitAttack();
+
         horizontalInput = Input.GetAxis("Horizontal") * speedHero;
 
         if (Input.GetKeyDown(KeyCode.F) && !noStamina)
@@ -140,7 +142,7 @@ public class KnightHero : Singlton<KnightHero>, IDamagable
             timeBtwAttack = startTimeBtwAttack;
         }
         else
-            timeBtwAttack -= Time.deltaTime;
+            timeBtwAttack -= Time.deltaTime;     
 
         if (Stamina < maxStamina)
         {
@@ -196,7 +198,7 @@ public class KnightHero : Singlton<KnightHero>, IDamagable
                 estusPoisons[estusPoisons.Count - 1].transform.GetChild(0).GetComponent<Image>().fillAmount = 0;
                 Debug.Log(estusPoisons[estusPoisons.Count - 1].transform.GetChild(0).GetComponent<Image>().fillAmount);
             }
-            else if (estusPoisons[estusPoisons.Count - 2].transform.GetChild(0).GetComponent<Image>().fillAmount >0)
+            else if (estusPoisons[estusPoisons.Count - 2].transform.GetChild(0).GetComponent<Image>().fillAmount > 0)
                 estusPoisons[estusPoisons.Count - 2].transform.GetChild(0).GetComponent<Image>().fillAmount = 0;
             else
                 estusPoisons[estusPoisons.Count - 3].transform.GetChild(0).GetComponent<Image>().fillAmount = 0;
@@ -257,28 +259,65 @@ public class KnightHero : Singlton<KnightHero>, IDamagable
     [SerializeField] private float attackRange;
     [SerializeField] private float startTimeBtwAttack;
     [SerializeField] private LayerMask whatIsEnemies;
+    [SerializeField] private List<ComboAttack> comboAttacks;
+    private float lastClickTime;
+    private float lastCombo;
     private float timeBtwAttack;
+    private int comboCounter;
 
     private IEnumerator Attack()
     {
-        MinusStamina(20);
-        anim.SetTrigger("isAtSpear");
-        yield return new WaitForSeconds(0.5f);
-        Collider2D[] enemiesToDamage = Physics2D.OverlapCircleAll(attackPos.position, attackRange, whatIsEnemies);
-        for (int i = 0; i < enemiesToDamage.Length; i++)
+        if (Time.time - lastCombo > 0.5f && comboCounter < comboAttacks.Count)
         {
-            if (enemiesToDamage[i].TryGetComponent(out Enemy enemy))
+            CancelInvoke("EndCombo");
+
+            if (Time.time - lastClickTime >= 0.2f)
             {
-                enemy.GetComponentInChildren<Enemy>().TakeDamage(damage.GetValue());
-                Debug.Log(damage.GetValue());
+                anim.runtimeAnimatorController = comboAttacks[comboCounter].animatorOv;
+                anim.SetTrigger("Attack");
+                //anim.Play("Attack", 0, 0);
+                comboCounter++;
+                lastClickTime = Time.time;
+
+                MinusStamina(20);
+                //anim.SetTrigger("isAtSpear");
+                yield return new WaitForSeconds(0.5f);
+                Collider2D[] enemiesToDamage = Physics2D.OverlapCircleAll(attackPos.position, attackRange, whatIsEnemies);
+                for (int i = 0; i < enemiesToDamage.Length; i++)
+                {
+                    if (enemiesToDamage[i].TryGetComponent(out Enemy enemy))
+                    {
+                        enemy.GetComponentInChildren<Enemy>().TakeDamage(damage.GetValue());
+                        Debug.Log(damage.GetValue());
+                    }
+                    if (enemiesToDamage[i].TryGetComponent(out EnemyArrow enemyArrow))
+                    {
+                        enemyArrow.GetComponentInChildren<EnemyArrow>().TakeDamage(damage.GetValue());
+                    }
+                    Debug.Log(enemiesToDamage[i].name);
+                }
+                Debug.Log("AttackHero");
+
+                if (comboCounter >= comboAttacks.Count)
+                {
+                    comboCounter = 0;
+                }
             }
-            if (enemiesToDamage[i].TryGetComponent(out EnemyArrow enemyArrow))
-            {
-                enemyArrow.GetComponentInChildren<EnemyArrow>().TakeDamage(damage.GetValue());
-            }
-            Debug.Log(enemiesToDamage[i].name);
         }
-        Debug.Log("AttackHero");
+    }
+
+    private void ExitAttack()
+    {
+        if (anim.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.9 && anim.GetCurrentAnimatorStateInfo(0).IsTag("Attack"))
+        {
+            Invoke("EndCombo", 1);
+        }
+    }
+    private void EndCombo()
+    {
+        comboCounter = 0;
+        lastCombo = Time.time;
+        Debug.Log("EndCombo");
     }
 
     private void Somersault()
