@@ -8,6 +8,7 @@ public abstract class Enemy : StateMachine, IDamagable
     [Header("Main Settings")]
     [SerializeField] private int health;
     [SerializeField] public float speedMove;
+    [SerializeField] private float maxSpeed;
 
     [Header("Effects Settings")]
     [SerializeField] private GameObject bloodEffect;
@@ -17,6 +18,7 @@ public abstract class Enemy : StateMachine, IDamagable
     private Rigidbody2D rb;
     private Collider2D collider2D;
     private Vector2 movement;
+    private float distance;
     public bool facingRight = true;
 
     private void Awake()
@@ -42,8 +44,12 @@ public abstract class Enemy : StateMachine, IDamagable
         direction.Normalize();
         movement = direction;
 
-        if (goPatrol)
+        distance = Vector2.Distance(rb.position, playerTransform.position);          
+
+            if (goPatrol)
             Patrol();
+
+        Debug.Log(speedMove);
 
         if (dazedTime <= 0)
         {
@@ -54,7 +60,6 @@ public abstract class Enemy : StateMachine, IDamagable
             speedMove = 0;
             dazedTime -= Time.deltaTime;
         }
-        Debug.Log(facingRight);
 
         if (Input.GetKeyDown(KeyCode.V))
         {
@@ -70,7 +75,7 @@ public abstract class Enemy : StateMachine, IDamagable
     public virtual void FixedUpdate()
     {
         if (canWalk)
-            MoveChar(movement);
+            MoveChar(movement, distance);
 
         if (transform.position.x != 0f)
         {
@@ -92,7 +97,7 @@ public abstract class Enemy : StateMachine, IDamagable
         }
     }
 
-    public int Health
+    public virtual int Health
     {
         get { return health; }
         set
@@ -133,8 +138,6 @@ public abstract class Enemy : StateMachine, IDamagable
     private void Patrol()
     {
         transform.position = Vector2.MoveTowards(transform.position, moveSpots[randomSpot].position, speedMove * Time.deltaTime);
-        
-        //rb.velocity= new Vector3(moveSpots[randomSpot].position.x/5,0,0);
 
         if (Vector2.Distance(transform.position, moveSpots[randomSpot].position) < 0.3f)
             if (waitTime <= 0)
@@ -162,21 +165,31 @@ public abstract class Enemy : StateMachine, IDamagable
     }
 
     [Header("Attack Settings")]
-    [SerializeField] private float attackCooldown;
+    [SerializeField] protected float attackCooldown;
     [SerializeField] private float attackDamage;
-    [SerializeField] private Transform attackPos;
-    [SerializeField] private float attackRange;
-    [SerializeField] private LayerMask whatIsPlayer;
+    [SerializeField] protected Transform attackPos;
+    [SerializeField] protected float attackRange;
+    [SerializeField] protected Vector3 attackOffset;
+    [SerializeField] protected LayerMask whatIsPlayer;
     [SerializeField] private float startDazedTime;
+    private bool canAttack;
     private bool isCooldown;
     private float dazedTime;
 
-    private void MoveChar(Vector3 direction)
+    private void MoveChar(Vector3 direction, float distance)
     {
-        if (direction.magnitude > 1f)
+        if (distance <= attackRange)
+        {
+            canAttack = true;
+            //animator.SetTrigger("isAttack1");
+            Debug.Log(distance);
             speedMove = 0;
+        }
         else
+        {
+            canAttack = false;
             rb.velocity = new Vector3((direction.x * speedMove), 0, 0);
+        }
     }
 
     public void Flip()
@@ -187,26 +200,48 @@ public abstract class Enemy : StateMachine, IDamagable
 
         facingRight = !facingRight;
     }
+
+    //public virtual void Attack()
+    //{
+    //    Vector3 pos = transform.position;
+    //    pos += transform.right * attackOffset.x;
+    //    pos += transform.up * attackOffset.y;
+
+    //    Collider2D playerToDamage = Physics2D.OverlapCircle(attackPos.position, attackRange, whatIsPlayer);
+    //    if (playerToDamage != null)
+    //    {
+    //        playerToDamage.GetComponentInChildren<KnightHero>().TakeDamage(10);
+    //        Debug.Log(playerToDamage.name);
+    //    }
+    //    Debug.Log("AttackHero");
+    //}
+
     public virtual IEnumerator Attack()
     {
+        Vector3 pos = transform.position;
+        pos += transform.right * attackOffset.x;
+        pos += transform.up * attackOffset.y;
+
         animator.SetTrigger("isAttack1");
-        Collider2D[] playerToDamage = Physics2D.OverlapCircleAll(attackPos.position, attackRange, whatIsPlayer);
-        for (int i = 0; i < playerToDamage.Length; i++)
+        Collider2D playerToDamage = Physics2D.OverlapCircle(attackPos.position, attackRange, whatIsPlayer);
+        if (playerToDamage != null)
         {
-            playerToDamage[i].GetComponentInChildren<KnightHero>().TakeDamage(10);
-            Debug.Log(playerToDamage[i].name);
+            playerToDamage.GetComponentInChildren<KnightHero>().TakeDamage(10);
+            Debug.Log(playerToDamage.name);
         }
-        Debug.Log("AttackHero");
+
         yield return new WaitForSeconds(attackCooldown);
+
         StartCoroutine(Attack());
     }
-    public void SetAttack()
+    public virtual void SetAttack()
     {
         StartCoroutine(Attack());
     }
 
     public virtual void TakeDamage(int damageValue)
     {
+        Debug.Log(damageValue);
         Instantiate(bloodEffect, transform.position, Quaternion.identity);
         dazedTime = startDazedTime;
         Health -= damageValue;
@@ -226,7 +261,11 @@ public abstract class Enemy : StateMachine, IDamagable
     {
         if (collision.gameObject.tag == "ground")
         {
-                rb.gravityScale = 0.3f;
+            rb.gravityScale = 0.3f;
+        }
+        if (collision.gameObject.tag == "Player")
+        {
+            //speedMove=0f;
         }
     }
 
@@ -236,6 +275,10 @@ public abstract class Enemy : StateMachine, IDamagable
         {
             //anim.SetBool("isFall", true);
             rb.gravityScale = 15f;
+        }
+        if (collision.gameObject.tag == "Player")
+        {
+            //speedMove = maxSpeed;
         }
     }
     //public IEnumerator AttackCooldown()

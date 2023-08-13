@@ -21,6 +21,8 @@ public class KnightHero : Singlton<KnightHero>, IDamagable
     public int experience = 0;
     public int gold = 0;
 
+    public CheckPointObelisk checkPointObelisk;
+
     [Header("Effects Settings")]
     [SerializeField] private GameObject bloodEffect;
 
@@ -106,7 +108,7 @@ public class KnightHero : Singlton<KnightHero>, IDamagable
         if (Input.GetKeyDown(KeyCode.V))
             AddEstus();
 
-        if (Input.GetKeyDown(KeyCode.C))
+        if (Input.GetKeyDown(KeyCode.C) && CheckPointObelisk.Instance.canResetEstus)
             Checkpoint();
 
         if (EventSystem.current.IsPointerOverGameObject())
@@ -142,7 +144,7 @@ public class KnightHero : Singlton<KnightHero>, IDamagable
             timeBtwAttack = startTimeBtwAttack;
         }
         else
-            timeBtwAttack -= Time.deltaTime;     
+            timeBtwAttack -= Time.deltaTime;
 
         if (Stamina < maxStamina)
         {
@@ -236,7 +238,7 @@ public class KnightHero : Singlton<KnightHero>, IDamagable
         if (oldItem != null)
         {
             armor.RemoveModifier(oldItem.armorModifier);
-            armor.RemoveModifier(oldItem.damageModifier);
+            damage.RemoveModifier(oldItem.damageModifier);
         }
     }
 
@@ -275,12 +277,11 @@ public class KnightHero : Singlton<KnightHero>, IDamagable
             {
                 anim.runtimeAnimatorController = comboAttacks[comboCounter].animatorOv;
                 anim.SetTrigger("Attack");
-                //anim.Play("Attack", 0, 0);
                 comboCounter++;
                 lastClickTime = Time.time;
 
                 MinusStamina(20);
-                //anim.SetTrigger("isAtSpear");
+
                 yield return new WaitForSeconds(0.5f);
                 Collider2D[] enemiesToDamage = Physics2D.OverlapCircleAll(attackPos.position, attackRange, whatIsEnemies);
                 for (int i = 0; i < enemiesToDamage.Length; i++)

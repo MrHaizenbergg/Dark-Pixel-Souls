@@ -40,7 +40,6 @@ public class EquipManager : Singlton<EquipManager>
         }
 
         currentEquipment[slotIndex] = newItem;
-
     }
 
     public void UnEquip(int slotIndex)
