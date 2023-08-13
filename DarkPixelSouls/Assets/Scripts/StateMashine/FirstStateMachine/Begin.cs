@@ -6,6 +6,7 @@ public class Begin : State
 {
     public Begin(Enemy enemy) : base(enemy)
     {
+       
     }
 
     public override IEnumerator Enter()
@@ -17,4 +18,8 @@ public class Begin : State
         yield return new WaitForSeconds(1);
     }
 
+    //public override IEnumerator Exit()
+    //{
+
+    //}
 }

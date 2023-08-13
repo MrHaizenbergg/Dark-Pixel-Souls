@@ -12,11 +12,15 @@ public class Arrow : Singlton<Arrow>
     private Rigidbody2D _rb;
     private Collider2D _collider;
     private bool stopArrow;
+    private float randomMass;
 
     private void Start()
     {
         _rb = GetComponent<Rigidbody2D>();
         _collider=GetComponent<Collider2D>();
+        //randomMass = Random.Range(0.2f, 1f);
+        //Debug.Log(randomMass);
+        //_rb.mass = randomMass;
         Invoke("DestroyArrow", lifetime);
     }
 

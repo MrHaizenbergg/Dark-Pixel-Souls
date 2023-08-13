@@ -87,7 +87,7 @@ Transform:
   m_GameObject: {fileID: 2480470193040823808}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4.32, y: 0, z: 0}
+  m_LocalPosition: {x: 7.118, y: -0.79, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -313,6 +313,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health: 120
   speedMove: 4
+  maxSpeed: 4
   bloodEffect: {fileID: 2694695581397470136, guid: 2b603d6fd9d843843835573974696bfa,
     type: 3}
   playerTransform: {fileID: 0}
@@ -321,12 +322,14 @@ MonoBehaviour:
   moveSpots:
   - {fileID: 9204907245945888990}
   - {fileID: 6235513084482062279}
-  startWaitTime: 0
+  startWaitTime: 3
   attackCooldown: 2
   attackDamage: 15
   attackPos: {fileID: 2733031022441841167}
-  attackRange: 1
+  attackRange: 2
+  attackOffset: {x: 0, y: 0, z: 0}
   whatIsPlayer:
     serializedVersion: 2
     m_Bits: 256
   startDazedTime: 0.7
+  canAttack: 0

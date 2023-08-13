@@ -25,7 +25,7 @@ Transform:
   m_GameObject: {fileID: 1019192692718019711}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 7.51, y: -0.87, z: 0}
+  m_LocalPosition: {x: 7.2, y: 1.24, z: 0}
   m_LocalScale: {x: 1.7999998, y: 1.7999998, z: 1.7999998}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -87,7 +87,7 @@ Transform:
   m_GameObject: {fileID: 5378666587971686302}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.83, y: -0.13, z: 0}
+  m_LocalPosition: {x: -1.07, y: -0.21, z: 0}
   m_LocalScale: {x: 1.7999998, y: 1.7999998, z: 1.7999998}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -240,9 +240,9 @@ Rigidbody2D:
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_SleepingMode: 1
-  m_CollisionDetection: 1
+  m_CollisionDetection: 0
   m_Constraints: 4
 --- !u!95 &8725323746329143073
 Animator:
@@ -279,6 +279,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health: 100
   speedMove: 2.5
+  maxSpeed: 2.5
   bloodEffect: {fileID: 2694695581397470136, guid: 2b603d6fd9d843843835573974696bfa,
     type: 3}
   playerTransform: {fileID: 0}
@@ -292,10 +293,12 @@ MonoBehaviour:
   attackDamage: 10
   attackPos: {fileID: 2756555002000081630}
   attackRange: 0.96
+  attackOffset: {x: 0, y: 0, z: 0}
   whatIsPlayer:
     serializedVersion: 2
     m_Bits: 256
   startDazedTime: 0.7
+  canAttack: 0
 --- !u!70 &5035284370944226680
 CapsuleCollider2D:
   m_ObjectHideFlags: 0

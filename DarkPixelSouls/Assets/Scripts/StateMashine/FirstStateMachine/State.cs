@@ -19,6 +19,10 @@ public abstract class State
     {
 
     }
+    public virtual void FixedUpdate()
+    {
+
+    }
     public virtual IEnumerator Exit()
     {
         yield break;

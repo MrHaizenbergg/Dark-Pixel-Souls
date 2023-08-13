@@ -6,8 +6,11 @@ public class Attacker : State
 {
     public Attacker(Enemy enemy) : base(enemy)
     {
-
     }
+
+    //public override IEnumerator Enter()
+    //{
+    //}
 
     public override IEnumerator Exit()
     {
@@ -15,11 +18,6 @@ public class Attacker : State
         Enemy.MoveToPlayer();
         Enemy.SetAttack();
         Debug.Log("AttackerAttack");
-        yield return new WaitForSeconds(1);
-    }
-
-    public override void Update()
-    {
-
+        yield return new WaitForSeconds(1);      
     }
 }

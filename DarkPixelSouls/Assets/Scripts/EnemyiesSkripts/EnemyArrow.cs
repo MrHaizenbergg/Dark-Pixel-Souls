@@ -49,11 +49,6 @@ public abstract class EnemyArrow : MonoBehaviour, IDamagable
             speedMove = 0;
             dazedTime -= Time.deltaTime;
         }
-
-        //if (isCooldown == false)
-        //{
-        //    StartCoroutine(Attack());
-        //}
     }
 
     public virtual void FixedUpdate()
