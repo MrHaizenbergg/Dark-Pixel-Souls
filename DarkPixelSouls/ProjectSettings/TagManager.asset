@@ -5,13 +5,13 @@ TagManager:
   serializedVersion: 2
   tags:
   - Enemy
-  - Cheese
   - Trap
   - ground
   - Ground
   - SwordDamage
   - EnemyAttack1
   - New tag
+  - Arrow
   layers:
   - Default
   - TransparentFX

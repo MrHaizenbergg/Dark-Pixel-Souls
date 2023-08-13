@@ -16,20 +16,19 @@ public class BringerOfDeath : Enemy
 
     private int randomPos;
 
-    //public override IEnumerator Attack()
-    //{
-    //    animator.SetTrigger("isAttack1");
-    //    yield return new WaitForSeconds(0.6f);
-    //    Collider2D[] playerToDamage = Physics2D.OverlapCircleAll(attackPos.position, attackRange, whatIsPlayer);
-    //    for (int i = 0; i < playerToDamage.Length; i++)
-    //    {
-    //        playerToDamage[i].GetComponentInChildren<KnightHero>().TakeDamage(10);
-    //        Debug.Log(playerToDamage[i].name);
-    //    }
-    //    Debug.Log("AttackHero");
-    //    yield return new WaitForSeconds(attackCooldown);
-    //    StartCoroutine(Attack());
-    //}
+    public override void Attack()
+    {
+        Vector3 pos = transform.position;
+        pos += transform.right * attackOffset.x;
+        pos += transform.up * attackOffset.y;
+
+        Collider2D playerToDamage = Physics2D.OverlapCircle(attackPos.position, attackRange, whatIsPlayer);
+        if (playerToDamage != null)
+        {
+            playerToDamage.GetComponentInChildren<KnightHero>().TakeDamage(25);
+            Debug.Log(playerToDamage.name);
+        }
+    }
 
     public override void Update()
     {
@@ -48,12 +47,12 @@ public class BringerOfDeath : Enemy
         GameObject go = Instantiate(castDisk, castPos.position, Quaternion.identity);
         if (transform.localScale.x < 0)
             go.GetComponent<Rigidbody2D>().AddForce(rightCastDir * 2f, ForceMode2D.Impulse);
-        else if(transform.localScale.x > 0)
-            go.GetComponent<Rigidbody2D>().AddForce(leftCastDir*2f, ForceMode2D.Impulse);
+        else if (transform.localScale.x > 0)
+            go.GetComponent<Rigidbody2D>().AddForce(leftCastDir * 2f, ForceMode2D.Impulse);
     }
     public IEnumerator AlternativeAttack()
     {
-        randomPos=Random.Range(0, castHandPoses.Length);
+        randomPos = Random.Range(0, castHandPoses.Length);
         animator.SetBool("isCastHand", true);
 
         for (int i = 0; i < castHandPoses.Length; i++)

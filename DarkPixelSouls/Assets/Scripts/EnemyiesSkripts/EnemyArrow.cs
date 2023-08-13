@@ -111,11 +111,13 @@ public abstract class EnemyArrow : MonoBehaviour, IDamagable
     }
     public virtual IEnumerator Attack()
     {
+        Vector3 randomVector = new Vector3(Random.Range(-0.2f, -1f), Random.Range(0.1f, 0.3f), 0);
+
         yield return new WaitForSeconds(attackCooldown);
         animator.SetTrigger("isShoot");
         yield return new WaitForSeconds(1.5f);
         GameObject go = Instantiate(arrow, shootPoint.position, Quaternion.identity);
-        go.GetComponent<Rigidbody2D>().AddForce(new Vector3(-0.9f,0.1f,0)*2f, ForceMode2D.Impulse);
+        go.GetComponent<Rigidbody2D>().AddForce(randomVector*2f, ForceMode2D.Impulse);
         Debug.Log("Archer Shoot");
         shootCoroutine = StartCoroutine(Attack());
     }

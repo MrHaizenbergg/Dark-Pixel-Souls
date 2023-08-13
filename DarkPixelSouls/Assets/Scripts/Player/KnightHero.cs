@@ -35,6 +35,7 @@ public class KnightHero : Singlton<KnightHero>, IDamagable
     private bool noStamina;
     private bool facingRight = true;
     public bool shield;
+    private bool invulerability;
 
     private Rigidbody2D rb;
     private Animator anim;
@@ -45,11 +46,16 @@ public class KnightHero : Singlton<KnightHero>, IDamagable
         get { return health; }
         set
         {
+            if (invulerability)
+                return;
+
             health = value;
+
             if (Health > maxHealth)
             {
                 Health = maxHealth;
             }
+
             if (health <= 0)
             {
                 health = 0;
@@ -119,7 +125,7 @@ public class KnightHero : Singlton<KnightHero>, IDamagable
         horizontalInput = Input.GetAxis("Horizontal") * speedHero;
 
         if (Input.GetKeyDown(KeyCode.F) && !noStamina)
-            Somersault();
+            StartCoroutine(Somersault());
 
         if (Input.GetKeyDown(KeyCode.Space) && ground)
             Jump();
@@ -321,10 +327,13 @@ public class KnightHero : Singlton<KnightHero>, IDamagable
         Debug.Log("EndCombo");
     }
 
-    private void Somersault()
+    private IEnumerator Somersault()
     {
+        invulerability = true;
         anim.SetTrigger("isSwap");
         MinusStamina(20);
+        yield return new WaitForSeconds(1f);
+        invulerability = false;
     }
 
     void OnDrawGizmosSelected()
@@ -361,6 +370,7 @@ public class KnightHero : Singlton<KnightHero>, IDamagable
             rb.gravityScale = 15f;
         }
     }
+
     public void MinusStamina(int staminaValue)
     {
         Stamina -= staminaValue;

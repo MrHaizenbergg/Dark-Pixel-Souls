@@ -17,7 +17,7 @@ public class Arrow : Singlton<Arrow>
     private void Start()
     {
         _rb = GetComponent<Rigidbody2D>();
-        _collider=GetComponent<Collider2D>();
+        _collider = GetComponent<Collider2D>();
         //randomMass = Random.Range(0.2f, 1f);
         //Debug.Log(randomMass);
         //_rb.mass = randomMass;
@@ -56,16 +56,20 @@ public class Arrow : Singlton<Arrow>
                 _rb.AddForce(new Vector3(0.5f, 0.3f, 0), ForceMode2D.Impulse);
                 _rb.AddTorque(0.05f, ForceMode2D.Impulse);
                 _rb.gravityScale = 0.5f;
-                _collider.enabled= false;
+                _collider.enabled = false;
             }
             else
             {
+                stopArrow = true;
                 collision.gameObject.GetComponentInChildren<KnightHero>().TakeDamage(20);
-                DestroyArrow();
+                Destroy(gameObject);
             }
         }
         if (collision.gameObject.CompareTag("ground"))
         {
+            stopArrow = true;
+            _collider.enabled = false;
+            _rb.bodyType = RigidbodyType2D.Static;
             Destroy(gameObject, 2f);
         }
     }
