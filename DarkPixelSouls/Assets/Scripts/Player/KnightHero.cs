@@ -196,7 +196,7 @@ public class KnightHero : Singlton<KnightHero>, IDamagable
 
     public void DrinkEstus()
     {
-        if (countPoisons > 0)
+        if (countPoisons > 0 && !invulerability)
         {
             Health += 40;
             countPoisons--;
@@ -217,8 +217,8 @@ public class KnightHero : Singlton<KnightHero>, IDamagable
 
     public void QuestReward()
     {
-        experience += 2;
-        gold += 3;
+        //experience += 2;
+        //gold += 3;
 
         if (quests[0].isActive)
         {
@@ -254,7 +254,7 @@ public class KnightHero : Singlton<KnightHero>, IDamagable
         rb.AddForce(Vector3.up * jumpForceHero, ForceMode2D.Force);
         ground = false;
         if (ground == false)
-            rb.gravityScale = 15f;
+            rb.gravityScale = 20f;
     }
     private void Shield()
     {
@@ -357,7 +357,7 @@ public class KnightHero : Singlton<KnightHero>, IDamagable
         {
             ground = true;
             if (ground == true)
-                rb.gravityScale = 4f;
+                rb.gravityScale = 0.5f;
             anim.SetBool("isFall", false);
             //anim.SetBool("isJump", false);
         }
@@ -367,7 +367,7 @@ public class KnightHero : Singlton<KnightHero>, IDamagable
         if (collision.gameObject.tag == "ground")
         {
             anim.SetBool("isFall", true);
-            rb.gravityScale = 15f;
+            rb.gravityScale = 28f;
         }
     }
 
